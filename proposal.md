@@ -22,6 +22,27 @@ Rodent inspection:
 
 ## The motivation for this project
 
+To the world, New York City is the “Big Apple,” but many New Yorkers
+know it as the city of rats. Rats are so much a part of daily life that
+they have become an unofficial mascot of the city. Their true number is
+unknown, but a 2023 estimate put it at as many as 3 million rats,
+roughly one for every three New Yorkers. Beyond being a nuisance, rats
+are a public health concern: they spread leptospirosis, and NYC reported
+a record 24 human cases in 2023.
+
+To reduce the food supply that keeps rats thriving, the city began
+requiring trash to be placed in lidded bins instead of bags left on the
+curb. The rules were phased in: food-related businesses in 2023, all
+businesses in March 2024, and buildings with 1–9 residential units in
+November 2024. The idea is simple: trash bags tear open easily, spilling
+food waste that attracts rats, while sealed bins do not. But does it
+work?
+
+This project will test whether 311 rat sightings, a proxy for rat
+activity, declined after the bin rules took effect, and whether they
+declined more in neighborhoods where the residential rule applied to
+more housing.
+
 ## The intended final products
 
 ## The anticipated data sources
