@@ -16,7 +16,12 @@ PLUTO:
 Rodent inspection:
 <https://data.cityofnewyork.us/Health/Rodent-Inspection/p937-wjvj/about_data>
 
+NYC Community District boundaries:
+<https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/about_data>
+
 ## The group members (names and UNIs)
+
+Yueran Pan yp2743
 
 ## The tentative project title
 
@@ -46,6 +51,16 @@ more housing.
 ## The intended final products
 
 ## The anticipated data sources
+
+To assess whether rat-sighting observations change after the NYC’s trash
+containerization rules and whether this decline was greater in community
+districts with a higher share of residential tax lots containing 1-9
+units, we obtain the proportion of initial active rat signs from NYC
+Rodent Inspection records and the monthly rat-sighting counts from NYC
+311 Service Requests. The estimated the share of residential tax lots
+with 1-9 units in each community district will be obtained from PLUTO,
+and this measure will be further mapped using NYC Community District
+Boundaries.
 
 ## Analyses / visualizations / coding challenges
 
