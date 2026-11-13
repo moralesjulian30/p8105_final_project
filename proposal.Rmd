@@ -1,18 +1,19 @@
 ---
 title: "Proposal"
-date: "2026-11-11"
+date: "2026-11-13"
 output: github_document
 ---
 
-## The group members (names and UNIs)
-- Yueran Pan (yp2743)
-- Zaixin Gao (zg2582)
-- Andrea Vasquez (adv2123)
-- Julian Morales (jem2315)
+## Team members: 
 
-## The tentative project title
+  - "Yueran Pan (yp2743)"
+  - "Zaixin Gao (zg2582)"
+  - "Andrea Vasquez (adv2123)"
+  - "Julian Morales (jem2315)"
 
-Bin There, Done That? Evaluating rat activity after NYC’s Trash Bin Mandate
+## Tentative title
+
+Bin There, Done That? Evaluating Rat Activity After NYC's Trash Bin Mandate
 
 ## Motivation
 

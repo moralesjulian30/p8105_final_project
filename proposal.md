@@ -1,17 +1,17 @@
 Proposal
 ================
-2026-11-11
+2026-11-13
 
-## The group members (names and UNIs)
+## Team members:
 
-- Yueran Pan (yp2743)
-- Zaixin Gao (zg2582)
-- Andrea Vasquez (adv2123)
-- Julian Morales (jem2315)
+- “Yueran Pan (yp2743)”
+- “Zaixin Gao (zg2582)”
+- “Andrea Vasquez (adv2123)”
+- “Julian Morales (jem2315)”
 
-## The tentative project title
+## Tentative title
 
-Bin There, Done That? Evaluating rat activity after NYC’s Trash Bin
+Bin There, Done That? Evaluating Rat Activity After NYC’s Trash Bin
 Mandate
 
 ## Motivation
