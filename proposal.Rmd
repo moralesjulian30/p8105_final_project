@@ -3,53 +3,46 @@ title: "Proposal"
 date: "2026-11-11"
 output: github_document
 ---
-Necessary links: 
-
-311 Service Requests from 2020 to present: https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2020-to-Present/erm2-nwe9/about_data
-
-2010-2019: https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-2019/76ig-c548/about_data
-
-PLUTO: https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Output-PLUTO-/64uk-42ks/about_data
-
-Rodent inspection: https://data.cityofnewyork.us/Health/Rodent-Inspection/p937-wjvj/about_data
-
-NYC Community District boundaries: 
-https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/about_data
 
 ## The group members (names and UNIs)
-Yueran Pan yp2743
-Zaixin Gao zg2582
+- Yueran Pan (yp2743)
+- Zaixin Gao (zg2582)
+- Andrea Vasquez (adv2123)
+- Julian Morales (jem2315)
 
 ## The tentative project title
 
-## The motivation for this project
+Bin There, Done That? Evaluating rat activity after NYC’s Trash Bin Mandate
 
-To the world, New York City is the “Big Apple,” but many New Yorkers know it as the city of rats. Rats are so much a part of daily life that they have become an unofficial mascot of the city. Their true number is unknown, but a 2023 estimate put it at as many as 3 million rats, roughly one for every three New Yorkers. Beyond being a nuisance, rats are a public health concern: they spread leptospirosis, and NYC reported a record 24 human cases in 2023.
+## Motivation
 
-To reduce the food supply that keeps rats thriving, the city began requiring trash to be placed in lidded bins instead of bags left on the curb. The rules were phased in: food-related businesses in 2023, all businesses in March 2024, and buildings with 1–9 residential units in November 2024. The idea is simple: trash bags tear open easily, spilling food waste that attracts rats, while sealed bins do not. But does it work?
+To the world, New York City is the "Big Apple," but many New Yorkers know it as the city of rats. A 2023 estimate put the population at as many as 3 million rats, roughly one for every three New Yorkers. Rats are also a public health concern: they spread leptospirosis, and NYC reported a record 24 human cases in 2023.
+
+To cut off rats' food supply, the city began requiring trash to be placed in lidded bins instead of bags on the curb. The rules were phased in: food-related businesses in 2023, all businesses in March 2024, and buildings with 1–9 residential units in November 2024. But does it work?
 
 This project will test whether 311 rat sightings, a proxy for rat activity, declined after the bin rules took effect, and whether they declined more in neighborhoods where the residential rule applied to more housing.
 
-## The intended final products
+## Intended final products
 
-We intend to build a public website that presents our analysis in a way that is accessible to a broad audience. The homepage will introduce the problem of rats in NYC, summarize the city’s trash rules, and state our main research questions, along with a brief overview of our key findings. 
+A public website with a full report, interactive maps of NYC community districts showing rule exposure and changes in rat activity, time-series plots of monthly rat sightings with the policy dates marked, and a two-minute screencast.
 
-The main feature of the website will be interactive dashboards built around maps of NYC community districts. These maps may show how exposure to the residential bin rule differs across the city, how rat activity changed before and after the rules took effect, and whether the patterns seen in 311 rat sightings are consistent with those from rodent inspection results. Users may be able to hover over a district to see its values, or switch between time periods and measures, so they can explore the data on their own. Alongside the maps, we plan to include supporting visualizations, such as time-series plots of monthly rat sightings with the policy dates marked, comparisons across boroughs, etc. 
+## Anticipated data sources
 
-## The anticipated data sources
+- **NYC 311 Service Requests** (2010–2019 and 2020–present): monthly rat-sighting counts by community district
+- **NYC Rodent Inspection**: share of initial inspections finding active rat signs
+- **PLUTO**: share of residential units in 1–9 unit buildings in each community district
+- **NYC Community District boundaries**: for mapping
 
-To assess whether rat-sighting observations change after the NYC's trash containerization rules and whether this decline was greater in community districts with a higher share of residential tax lots containing 1-9 units, we obtain the proportion of initial active rat signs from NYC Rodent Inspection records and the monthly rat-sighting counts from NYC 311 Service Requests. The estimated the share of residential tax lots with 1-9 units in each community district will be obtained from PLUTO, and this measure will be further mapped using NYC Community District Boundaries.
+## Planned analyses, visualizations, and coding challenges
 
-## Analyses / visualizations / coding challenges
-Potential challenges we may face in this analysis include aggregating data from different publicly available NYC databases that may not have properly corresponding variables or consistent formatting. Additionally, using 311 complaint data to measure rat sightings may introduce reporting bias, as the number of complaints may not accurately reflect true rat populations. We may also encounter challenges when cleaning and filtering large datasets, calculating rat sighting rates across different time periods and boroughs, and creating Plotly visualizations without performance issues. Another potential challenge would be accounting for seasonal trends or other factors that may influence rat sightings or populations will be important when comparing rates before and after NYC's trash bin policy in 2023.
+We will compare rat sightings before and after each rule, citywide and by district, and test whether the decline was larger in districts with more small residential buildings, using count models that account for seasonality. Visualizations will include district maps, time-series plots, and borough comparisons using Plotly.
+
+Challenges include combining datasets with different district formats, efficiently downloading and filtering large 311 files, separating seasonal patterns and overlapping policies from the rules' effects, and the fact that 311 complaints reflect reporting, not true rat numbers.
 
 ## Planned timeline
-*November 16-20* - 	Review NYC 311 call data, rodent inspection data, and trash bin collection data links. 
 
-*November 20 - 27* - Set parameters for time frame where we will compare rat sighting rates before and after NYC trash bin collection mandate, clean data, create and merge 311 call data set, select necessary variables and perform preliminary analysis (variable count, observation count, distributions).
-
-*November 28 - December 4* - Plot graph of rat sighting rates across years, for boroughs in NYC and plot known trash bin collection sites across NYC (as plotly graphs). Include a geographic and bar graph to visualize distributions. Create webpage index, about, and dashboard pages to place produced graphs and project explanation.
-
-*December 5 - 11* - Write out report on results, data cleaning and wrangling, outputs and add report.rmd page to webpage. Add project scope, data, approaches, visualizations, and other results to webpage pages. Record two-minute narrated screencast.
-
-*December 12* - Submit final report, Webpage and screencast, and peer assessment.
+- **Nov 16–20:** Project review meeting; review and download all data sources
+- **Nov 20–27:** Clean and merge data; define comparison periods; preliminary analysis
+- **Nov 28–Dec 4:** Build maps and plots; run models; set up website pages
+- **Dec 5–11:** Write report; finish website; record screencast
+- **Dec 12:** Submit report, website, screencast, and peer assessment
