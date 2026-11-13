@@ -18,6 +18,7 @@ https://data.cityofnewyork.us/City-Government/Community-Districts/5crt-au7u/abou
 
 ## The group members (names and UNIs)
 Yueran Pan yp2743
+Zaixin Gao zg2582
 
 ## The tentative project title
 
@@ -30,6 +31,10 @@ To reduce the food supply that keeps rats thriving, the city began requiring tra
 This project will test whether 311 rat sightings, a proxy for rat activity, declined after the bin rules took effect, and whether they declined more in neighborhoods where the residential rule applied to more housing.
 
 ## The intended final products
+
+We intend to build a public website that presents our analysis in a way that is accessible to a broad audience. The homepage will introduce the problem of rats in NYC, summarize the city’s trash rules, and state our main research questions, along with a brief overview of our key findings. 
+
+The main feature of the website will be interactive dashboards built around maps of NYC community districts. These maps may show how exposure to the residential bin rule differs across the city, how rat activity changed before and after the rules took effect, and whether the patterns seen in 311 rat sightings are consistent with those from rodent inspection results. Users may be able to hover over a district to see its values, or switch between time periods and measures, so they can explore the data on their own. Alongside the maps, we plan to include supporting visualizations, such as time-series plots of monthly rat sightings with the policy dates marked, comparisons across boroughs, etc. 
 
 ## The anticipated data sources
 
