@@ -30,6 +30,8 @@ This project will test whether 311 rat sightings, a proxy for rat activity, decl
 
 ## The anticipated data sources
 
+To assess whether rat-sighting observations change after the NYC's trash containerization rules and whether this decline was greater in community districts with a higher share of residential tax lots containing 1-9 units, we obtain the proportion of initial active rat signs from NYC Rodent Inspection records and the monthly rat-sighting counts from NYC 311 Service Requests. The estimated the share of residential tax lots with 1-9 units in each community district will be obtained from PLUTO, and this measure will be further mapped using NYC Community District boundaries data. 
+
 ## Analyses / visualizations / coding challenges
 Potential challenges we may face in this analysis include aggregating data from different publicly available NYC databases that may not have properly corresponding variables or consistent formatting. Additionally, using 311 complaint data to measure rat sightings may introduce reporting bias, as the number of complaints may not accurately reflect true rat populations. We may also encounter challenges when cleaning and filtering large datasets, calculating rat sighting rates across different time periods and boroughs, and creating Plotly visualizations without performance issues. Another potential challenge would be accounting for seasonal trends or other factors that may influence rat sightings or populations will be important when comparing rates before and after NYC's trash bin policy in 2023.
 
