@@ -14,6 +14,7 @@ PLUTO: https://data.cityofnewyork.us/City-Government/Primary-Land-Use-Tax-Lot-Ou
 Rodent inspection: https://data.cityofnewyork.us/Health/Rodent-Inspection/p937-wjvj/about_data
 
 ## The group members (names and UNIs)
+Yueran Pan yp2743
 
 ## The tentative project title
 
