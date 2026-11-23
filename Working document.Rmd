@@ -1,15 +1,79 @@
 ---
 title: "Work Document"
-author: "Julian Morales"
+author: "Julian Morales, Andrea Vasquez"
 date: "2026-11-22"
 output: html_document
 ---
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(httr)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## 311 rodent complaints, 2018 - 2026
+
+The data come from the NYC Open Data API, read with `GET()`, so anyone can rerun this file. The API returns only 1,000 rows by default, so we raise `$limit` and download one year at a time. 311 is split into two datasets: `76ig-c548` covers 2010-2019 and `erm2-nwe9` covers 2020 to present. We keep every complaint with complaint type "Rodent" and choose the descriptor ("Rat Sighting") later, so no category is lost.
+
+### Function to download dataset
+
+```{r download_function}
+get_rodent_year = function(dataset_id, yr) {
+
+  Sys.sleep(5)
+
+  GET(
+    paste0("https://data.cityofnewyork.us/resource/", dataset_id, ".csv"),
+    query = list(
+      "$select" = "unique_key, created_date, descriptor, community_board, borough, location_type, latitude, longitude",
+      "$where" = paste0(
+        "complaint_type = 'Rodent' AND created_date >= '", yr,
+        "-01-01T00:00:00' AND created_date < '", yr + 1, "-01-01T00:00:00'"
+      ),
+      "$limit" = "300000"
+    )
+  ) |>
+    content("text") |>
+    read_csv(col_types = cols(.default = "c"))
+}
+```
+
+### Data import 
+
+```{r download_data}
+if (!file.exists("data/rodent_311.csv")) {
+
+  dir.create("data", showWarnings = FALSE)
+
+  rodent_2018_2019 =
+    map(2018:2019, \(yr) get_rodent_year("76ig-c548", yr)) |>
+    bind_rows()
+
+  rodent_2020_2026 =
+    map(2020:2026, \(yr) get_rodent_year("erm2-nwe9", yr)) |>
+    bind_rows()
+
+  rodent_raw = bind_rows(rodent_2018_2019, rodent_2020_2026)
+
+  write_csv(rodent_raw, "data/rodent_311.csv")
+}
 ```
 
 
-## 311 rat call data 2020 - 2026
 ```{r message=FALSE, warning=FALSE}
 nyc_311_2020 = 
   read_csv("data/nyc_311_2020.csv") |> 
@@ -67,4 +131,5 @@ descriptor_plot =
   geom_smooth(se = FALSE)
 descriptor_plot
 ```
+
 
