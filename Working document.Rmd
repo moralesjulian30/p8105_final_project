@@ -144,6 +144,91 @@ complaint_type |>
 
 Note: `r max(nyc_rodent$year)` is not a full year, so its totals are lower than other years.
 
+### Type of rodent complaint plot
+
+```{r complaint_type_plot, fig.width = 10, fig.asp = 0.5}
+nyc_rodent |>
+  mutate(descriptor = recode(descriptor, "Rodent Bite - PCS Only" = "Rodent Bite")) |>
+  count(month, descriptor) |>
+  ggplot(aes(x = month, y = n, color = descriptor)) +
+  geom_line() +
+  labs(
+    title = "Monthly 311 rodent complaints by type",
+    x = "Year",
+    y = "Number of complaints",
+    color = "Complaint type"
+  ) +
+  guides(color = guide_legend(nrow = 2))
+```
+
+### Rat sightings
+
+Rat sightings are our main outcome. The dashed lines mark when each trash bin rule took effect, according to the NYC Department of Sanitation (DSNY).
+
+```{r rat_borough_plot, fig.width = 10, fig.asp = 0.5}
+rat_sightings =
+  nyc_rodent |>
+  filter(descriptor == "Rat Sighting")
+
+bin_rules =
+  tibble(
+    date = as.Date(c("2023-08-01", "2023-09-05", "2024-03-01", "2024-11-12")),
+    rule = c("Food businesses", "Chain businesses", "All businesses", "1-9 unit buildings")
+  )
+
+rat_sightings |>
+  filter(borough != "Unspecified", !is.na(borough)) |>
+  count(borough, month) |>
+  ggplot(aes(x = month, y = n, color = borough)) +
+  geom_line() +
+  geom_vline(
+    data = bin_rules,
+    aes(xintercept = date),
+    linetype = "dashed",
+    color = "red"
+  ) +
+  labs(
+    title = "Monthly 311 rat sightings by borough",
+    subtitle = "Dashed lines: bin rules for food businesses (Aug 2023), chains (Sep 2023),\nall businesses (Mar 2024), and 1-9 unit buildings (Nov 2024)",
+    x = "Year",
+    y = "Number of rat sightings",
+    color = "Borough"
+  )
+```
+
+### Seasonal patterns in rat sightings by borough
+
+```{r rat_seasonality_plot, fig.width = 10, fig.asp = 0.5}
+winters =
+  tibble(
+    start = as.Date(paste0(2017:2025, "-12-01")),
+    end = as.Date(paste0(2018:2026, "-03-01"))
+  )
+
+rat_sightings |>
+  filter(borough != "Unspecified", !is.na(borough)) |>
+  count(borough, month) |>
+  ggplot(aes(x = month, y = n, color = borough)) +
+  geom_rect(
+    data = winters,
+    aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
+    inherit.aes = FALSE,
+    fill = "lightblue",
+    alpha = 0.3
+  ) +
+  geom_line() +
+  scale_x_date(date_breaks = "6 months", date_labels = "%b %Y") +
+  labs(
+    title = "Seasonal patterns in rat sightings by borough",
+    subtitle = "Shaded areas mark winter (December to February)",
+    x = NULL,
+    y = "Number of rat sightings",
+    color = "Borough"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+### Julian's code
 
 ```{r message=FALSE, warning=FALSE}
 nyc_311_2020 = 
@@ -202,5 +287,6 @@ descriptor_plot =
   geom_smooth(se = FALSE)
 descriptor_plot
 ```
+
 
 
