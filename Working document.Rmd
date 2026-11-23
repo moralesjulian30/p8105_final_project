@@ -1,0 +1,20 @@
+---
+title: "Work Document"
+author: "Julian Morales"
+date: "2026-11-22"
+output: html_document
+---
+```{r}
+library(tidyverse)
+```
+
+
+## 311 rat call data 2020 - 2026
+```{r}
+nyc_311_2020 = 
+  read_csv("data/nyc_311_2020.csv") |> janitor::clean_names()
+
+summary(nyc_311_2020)
+view(nyc_311_2020)
+```
+
