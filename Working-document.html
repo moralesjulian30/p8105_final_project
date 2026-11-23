@@ -405,6 +405,170 @@ descriptor (“Rat Sighting”) later, so no category is lost.</p>
 
   write_csv(rodent_raw, &quot;data/rodent_311.csv&quot;)
 }</code></pre>
+</div>
+<div id="data-cleaning" class="section level3">
+<h3>Data cleaning</h3>
+<p>311 writes community districts like “09 MANHATTAN”, while PLUTO uses
+codes like 109. We convert them to PLUTO’s format so the two datasets
+can be joined. We also drop the current month, which is incomplete.</p>
+<pre class="r"><code>last_full_month = lubridate::floor_date(Sys.Date(), &quot;month&quot;)
+
+nyc_rodent =
+  read_csv(&quot;data/rodent_311.csv&quot;, col_types = cols(.default = &quot;c&quot;)) |&gt;
+  janitor::clean_names() |&gt;
+  distinct(unique_key, .keep_all = TRUE) |&gt;
+  separate(
+    community_board,
+    into = c(&quot;board_num&quot;, &quot;board_boro&quot;),
+    sep = &quot; &quot;,
+    extra = &quot;merge&quot;,
+    remove = FALSE
+  ) |&gt;
+  mutate(
+    created_date = as.Date(created_date),
+    year = lubridate::year(created_date),
+    month = lubridate::floor_date(created_date, &quot;month&quot;),
+    board_num = as.numeric(board_num),
+    boro_code = case_when(
+      board_boro == &quot;MANHATTAN&quot; ~ 100,
+      board_boro == &quot;BRONX&quot; ~ 200,
+      board_boro == &quot;BROOKLYN&quot; ~ 300,
+      board_boro == &quot;QUEENS&quot; ~ 400,
+      board_boro == &quot;STATEN ISLAND&quot; ~ 500
+    ),
+    community_district = boro_code + board_num,
+    latitude = as.numeric(latitude),
+    longitude = as.numeric(longitude)
+  ) |&gt;
+  filter(month &lt; last_full_month) |&gt;
+  select(
+    unique_key, created_date, year, month, descriptor,
+    borough, community_board, community_district, location_type, latitude, longitude
+  )</code></pre>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `board_num = as.numeric(board_num)`.
+## Caused by warning:
+## ! NAs introduced by coercion</code></pre>
+<pre class="r"><code>## view dataset 
+
+view(nyc_rodent)</code></pre>
+<p>The dataset has 308042 rodent complaints from 2018-01-01 to
+2026-10-31.</p>
+</div>
+<div id="type-of-rodent-complaint" class="section level3">
+<h3>Type of rodent complaint</h3>
+<pre class="r"><code>complaint_type =
+  nyc_rodent |&gt;
+  group_by(year, descriptor) |&gt;
+  summarize(
+    n = n_distinct(unique_key),
+    .groups = &quot;drop&quot;
+  ) |&gt;
+  arrange(year)
+
+complaint_type |&gt;
+  pivot_wider(
+    names_from = descriptor,
+    values_from = n,
+    values_fill = 0
+  ) |&gt;
+  knitr::kable()</code></pre>
+<table style="width:100%;">
+<colgroup>
+<col width="4%" />
+<col width="28%" />
+<col width="14%" />
+<col width="12%" />
+<col width="16%" />
+<col width="22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">year</th>
+<th align="right">Condition Attracting Rodents</th>
+<th align="right">Mouse Sighting</th>
+<th align="right">Rat Sighting</th>
+<th align="right">Signs of Rodents</th>
+<th align="right">Rodent Bite - PCS Only</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2018</td>
+<td align="right">7430</td>
+<td align="right">4561</td>
+<td align="right">17353</td>
+<td align="right">3186</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">2019</td>
+<td align="right">7115</td>
+<td align="right">4278</td>
+<td align="right">16808</td>
+<td align="right">3438</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">2020</td>
+<td align="right">5624</td>
+<td align="right">3162</td>
+<td align="right">16262</td>
+<td align="right">2522</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
+<td align="right">2021</td>
+<td align="right">7111</td>
+<td align="right">3398</td>
+<td align="right">25012</td>
+<td align="right">3272</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="right">2022</td>
+<td align="right">6697</td>
+<td align="right">3473</td>
+<td align="right">26500</td>
+<td align="right">4440</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="right">2023</td>
+<td align="right">7748</td>
+<td align="right">3144</td>
+<td align="right">25452</td>
+<td align="right">5389</td>
+<td align="right">15</td>
+</tr>
+<tr class="odd">
+<td align="right">2024</td>
+<td align="right">6883</td>
+<td align="right">2047</td>
+<td align="right">25191</td>
+<td align="right">5604</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">2025</td>
+<td align="right">6030</td>
+<td align="right">1398</td>
+<td align="right">19896</td>
+<td align="right">3988</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2026</td>
+<td align="right">5509</td>
+<td align="right">794</td>
+<td align="right">15732</td>
+<td align="right">1534</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Note: 2026 is not a full year, so its totals are lower than other
+years.</p>
 <pre class="r"><code>nyc_311_2020 = 
   read_csv(&quot;data/nyc_311_2020.csv&quot;) |&gt; 
   janitor::clean_names() |&gt; 

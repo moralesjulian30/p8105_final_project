@@ -73,6 +73,77 @@ if (!file.exists("data/rodent_311.csv")) {
 }
 ```
 
+### Data cleaning
+
+
+311 writes community districts like "09 MANHATTAN", while PLUTO uses codes like 109. We convert them to PLUTO's format so the two datasets can be joined. We also drop the current month, which is incomplete.
+
+```{r clean_data, message = FALSE}
+last_full_month = lubridate::floor_date(Sys.Date(), "month")
+
+nyc_rodent =
+  read_csv("data/rodent_311.csv", col_types = cols(.default = "c")) |>
+  janitor::clean_names() |>
+  distinct(unique_key, .keep_all = TRUE) |>
+  separate(
+    community_board,
+    into = c("board_num", "board_boro"),
+    sep = " ",
+    extra = "merge",
+    remove = FALSE
+  ) |>
+  mutate(
+    created_date = as.Date(created_date),
+    year = lubridate::year(created_date),
+    month = lubridate::floor_date(created_date, "month"),
+    board_num = as.numeric(board_num),
+    boro_code = case_when(
+      board_boro == "MANHATTAN" ~ 100,
+      board_boro == "BRONX" ~ 200,
+      board_boro == "BROOKLYN" ~ 300,
+      board_boro == "QUEENS" ~ 400,
+      board_boro == "STATEN ISLAND" ~ 500
+    ),
+    community_district = boro_code + board_num,
+    latitude = as.numeric(latitude),
+    longitude = as.numeric(longitude)
+  ) |>
+  filter(month < last_full_month) |>
+  select(
+    unique_key, created_date, year, month, descriptor,
+    borough, community_board, community_district, location_type, latitude, longitude
+  )
+
+## view dataset 
+
+view(nyc_rodent)
+```
+
+The dataset has `r nrow(nyc_rodent)` rodent complaints from `r min(nyc_rodent$created_date)` to `r max(nyc_rodent$created_date)`.
+
+### Type of rodent complaint
+
+```{r complaint_type}
+complaint_type =
+  nyc_rodent |>
+  group_by(year, descriptor) |>
+  summarize(
+    n = n_distinct(unique_key),
+    .groups = "drop"
+  ) |>
+  arrange(year)
+
+complaint_type |>
+  pivot_wider(
+    names_from = descriptor,
+    values_from = n,
+    values_fill = 0
+  ) |>
+  knitr::kable()
+```
+
+Note: `r max(nyc_rodent$year)` is not a full year, so its totals are lower than other years.
+
 
 ```{r message=FALSE, warning=FALSE}
 nyc_311_2020 = 
