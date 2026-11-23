@@ -4,17 +4,67 @@ author: "Julian Morales"
 date: "2026-11-22"
 output: html_document
 ---
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 ```
 
 
 ## 311 rat call data 2020 - 2026
-```{r}
+```{r message=FALSE, warning=FALSE}
 nyc_311_2020 = 
-  read_csv("data/nyc_311_2020.csv") |> janitor::clean_names()
+  read_csv("data/nyc_311_2020.csv") |> 
+  janitor::clean_names() |> 
+  select(
+    unique_key,
+    created_date,
+    problem_formerly_complaint_type, 
+    problem_detail_formerly_descriptor, 
+    location_type,
+    incident_address,
+    borough, 
+    latitude,
+    longitude
+  ) |> 
+  mutate(
+    created_date = as.Date(lubridate::mdy_hms(created_date))
+  )
 
-summary(nyc_311_2020)
+# General view of data
 view(nyc_311_2020)
+
+#Summary based on types of 311 calls
+descriptor_summary = 
+  nyc_311_2020 |> 
+   mutate(
+    year = lubridate::year(created_date),
+    complaint = problem_detail_formerly_descriptor
+  ) |>
+  filter(
+    year >= 2020,
+    year <= 2026
+  ) |>
+  group_by(year, complaint) |>
+  summarize(
+    n = n_distinct(unique_key),
+    .groups = "drop"
+  ) |>
+  arrange(year)
+
+#tidy readable table
+descriptor_summary|>  
+  pivot_wider(
+    names_from = complaint,
+    values_from = n,
+    values_fill = 0
+  ) |> 
+  knitr::kable()
+
+#plots
+descriptor_plot = 
+  descriptor_summary |> 
+  ggplot(aes(x = year, y = n, color = complaint)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE)
+descriptor_plot
 ```
 
