@@ -7,6 +7,7 @@ output: html_document
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(httr)
+library(plotly)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -404,9 +405,82 @@ rat_group_plot
 
 ### City mapping of Rat sightings 
 
+```{r message=FALSE, warning=FALSE}
+#General Map Framework
+#2018 map
+nyc_rat_2018 = 
+  nyc_rodent |> 
+  select(year, descriptor, latitude, longitude) |> 
+  filter(
+    !is.na(year),
+    !is.na(descriptor),
+    !is.na(latitude),
+    !is.na(longitude),
+    year == "2018",
+    latitude != 0,
+    longitude != 0,
+    descriptor == "Rat Sighting"
+  )
+
+nyc_rat_2018 |> 
+  ggplot(aes(x = latitude, y = longitude, type = "scatter", mode = "markers",
+    color = descriptor, alpha = 0.5)) + 
+  geom_point()
+
+nyc_rat_2018 |> 
+  plot_ly(x = ~latitude, y = ~longitude, type = "scatter", mode = "markers",
+    color = ~descriptor, alpha = 0.5)
+
+# 2026 map
+nyc_rat_2026 = 
+  nyc_rodent |> 
+  select(year, descriptor, latitude, longitude) |> 
+  filter(
+    !is.na(year),
+    !is.na(descriptor),
+    !is.na(latitude),
+    !is.na(longitude),
+    year == "2026",
+    latitude != 0,
+    longitude != 0,
+    descriptor == "Rat Sighting"
+  )
+
+nyc_rat_2026 |> 
+  ggplot(aes(x = latitude, y = longitude, type = "scatter", mode = "markers",
+    color = descriptor, alpha = 0.5)) + 
+  geom_point()
+
+nyc_rat_2026 |> 
+  plot_ly(x = ~latitude, y = ~longitude, type = "scatter", mode = "markers",
+    color = ~descriptor, alpha = 0.5)
+```
+
+```{r message=FALSE, warning=FALSE, fig.width=12, fig.height=20}
+nyc_rat_allmap = 
+  nyc_rodent |> 
+  select(year, descriptor, latitude, longitude) |> 
+  filter(
+    !is.na(year),
+    !is.na(descriptor),
+    !is.na(latitude),
+    !is.na(longitude),
+    latitude != 0,
+    longitude != 0,
+    descriptor == "Rat Sighting"
+  ) |> 
+  group_by(year) |> 
+  ggplot(aes(x = latitude, y = longitude, type = "scatter", mode = "markers",
+    color = descriptor, alpha = 0.5)) + 
+  geom_point() + 
+  facet_wrap(.~year, ncol = 2)
+
+nyc_rat_allmap
+```
+
 
 ### Old 311 data code
-```{r message=FALSE, warning=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 nyc_311_2020 = 
   read_csv("data/nyc_311_2020.csv") |> 
   janitor::clean_names() |> 
